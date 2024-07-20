@@ -7,8 +7,8 @@
 		"baseColor": "zinc"
 	},
 	"aliases": {
-		"components": "@/components",
-		"utils": "@/utils.js"
+		"components": "$libshadui/components",
+		"utils": "$libshadui/utils"
 	},
 	"typescript": true
 }
