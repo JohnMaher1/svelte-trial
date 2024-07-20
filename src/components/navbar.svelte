@@ -7,6 +7,7 @@
 >
 	<div class="flex items-center space-x-4">
 		<a href="/" class="text-lg font-bold">Home</a>
+		<a href="/about" class="">About</a>
 	</div>
 	<div class="flex items-end space-x-4">
 		<ThemeSwitch />
