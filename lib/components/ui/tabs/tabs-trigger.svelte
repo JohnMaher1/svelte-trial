@@ -8,10 +8,7 @@
 	let className: $$Props['class'] = undefined;
 	export let value: $$Props['value'];
 	export { className as class };
-
-	const custom = cn(
-		'class="h-8 rounded-[7px] bg-transparent data-[state=active]:bg-primary data-[state=active]:shadow-mini dark:data-[state=active]:bg-muted"'
-	);
+	const custom = cn('dark:data-[state=active]:bg-primary data-[state=active]:shadow-mini"');
 </script>
 
 <TabsPrimitive.Trigger

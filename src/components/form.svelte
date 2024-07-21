@@ -1,29 +1,40 @@
+<script context="module">
+	export interface FormProps {
+		data: SuperValidated<Infer<FormSchema>>;
+		handleFormSubmit: (event: SubmitEvent) => void;
+	}
+</script>
+
 <script lang="ts">
-	import * as Form from '$libshadui/components/ui/form';
-	import * as Select from '$libshadui/components/ui/select';
-	import { Input } from '$libshadui/components/ui/input';
+	import { formSchema, type FormSchema, roles } from '$lib/forms/schema';
 	import { Checkbox } from '$libshadui/components/ui/checkbox';
-	import { formSchema, type FormSchema } from '$lib/forms/schema';
-	import { type SuperValidated, type Infer, superForm, type SuperForm } from 'sveltekit-superforms';
-	import { zodClient } from 'sveltekit-superforms/adapters';
+	import * as Form from '$libshadui/components/ui/form';
+	import { Input } from '$libshadui/components/ui/input';
 	import { Label } from '$libshadui/components/ui/label';
-	import { roles } from '$lib/forms/schema';
+	import * as Select from '$libshadui/components/ui/select';
+	import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
+	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	export let data: SuperValidated<Infer<FormSchema>>;
-	export let handleFormSubmit: (event: SubmitEvent) => void;
+	let { data = $bindable(), handleFormSubmit }: FormProps = $props();
 
-	const form = superForm(data, {
-		validators: zodClient(formSchema)
-	});
+	const form = $state(
+		superForm(data, {
+			validators: zodClient(formSchema)
+		})
+	);
 
-	$: selectedRole = $formData.role
-		? {
-				label: $formData.role,
-				value: $formData.role
-			}
-		: undefined;
+	// TODO fix reactive bindings
 
-	const { form: formData, enhance } = form;
+	const { enhance } = form;
+	const formData = form.form;
+	let selectedRole = $derived(
+		$formData.role
+			? {
+					label: $formData.role,
+					value: $formData.role
+				}
+			: undefined
+	);
 </script>
 
 <div class="mt-4 w-full rounded-lg p-6 shadow-md shadow-border 2xl:w-1/2">

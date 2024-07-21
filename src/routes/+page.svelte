@@ -6,16 +6,18 @@
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
 	import { error } from '@sveltejs/kit';
+	import type { FormSchema } from '$lib/forms/schema';
+	import { type SuperValidated, type Infer, superForm, type SuperForm } from 'sveltekit-superforms';
 
 	type TabValues = 'form' | 'checklist' | 'settings';
 	const form: TabValues = 'form';
 	const checklist: TabValues = 'checklist';
 	const settings: TabValues = 'settings';
-
-	let selectedValue: TabValues = form;
+	const t: number = $state(0);
+	let selectedValue: TabValues = $state(form);
 	//let selectedTab: TabValues | undefined = form;
 
-	export let formData: PageData = {
+	let formData: PageData = $state({
 		form: {
 			data: {
 				email: '',
@@ -31,9 +33,11 @@
 			posted: false,
 			valid: false
 		}
-	};
+	});
+	//export { formData };
 
 	function handleFormSubmit(event: SubmitEvent) {
+		console.log(event);
 		const val: HTMLFormElement = event.target as HTMLFormElement;
 		// Prevent default form submission behavior
 		event.preventDefault();
@@ -73,7 +77,7 @@
 			<Tabs.Trigger value={settings}>Settings</Tabs.Trigger>
 		</Tabs.List>
 		<Tabs.Content value={form}>
-			<Form data={formData.form} handleFormSubmit={(event) => handleFormSubmit(event)} />
+			<Form bind:data={formData.form} handleFormSubmit={(event) => handleFormSubmit(event)} />
 		</Tabs.Content>
 		<Tabs.Content value={checklist}></Tabs.Content>
 		<Tabs.Content value={settings}></Tabs.Content>
