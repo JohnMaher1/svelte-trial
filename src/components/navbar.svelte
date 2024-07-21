@@ -7,10 +7,12 @@
 >
 	<div class="flex items-center space-x-4">
 		<a href="/" class="text-lg font-bold">Home</a>
-		<a href="/about" class="">About</a>
 		<a href="/shopping-cart" class="">Shopping Cart</a>
+		<a href="/poke-page" class="">Pokepage</a>
+		<a href="/user" class="">User</a>
 	</div>
 	<div class="flex items-end space-x-4">
+		<a href="/login" class="self-center">Login</a>
 		<ThemeSwitch />
 	</div>
 </nav>

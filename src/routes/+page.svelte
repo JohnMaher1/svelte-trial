@@ -17,22 +17,22 @@
 	let selectedValue: TabValues = $state(form);
 	//let selectedTab: TabValues | undefined = form;
 
-	let formData: PageData = $state({
-		form: {
-			data: {
-				email: '',
-				password: '',
-				age: 1,
-				rememberMe: false,
-				terms: false,
-				username: '',
-				role: ''
-			},
-			id: 'form',
-			errors: {},
-			posted: false,
-			valid: false
-		}
+	const { data, form: formm } = $props();
+
+	let formData: SuperValidated<Infer<FormSchema>> = $state({
+		data: {
+			email: '',
+			password: '',
+			age: 1,
+			rememberMe: false,
+			terms: false,
+			username: '',
+			role: ''
+		},
+		id: 'form',
+		errors: {},
+		posted: false,
+		valid: false
 	});
 	//export { formData };
 
@@ -65,8 +65,8 @@
 </script>
 
 <div class="h-full w-full">
-	{#if formData.form.errors}
-		{#each Object.entries(formData.form.errors) as [key, value]}
+	{#if formData.errors}
+		{#each Object.entries(formData.errors) as [key, value]}
 			<p>{key}: {value}</p>
 		{/each}
 	{/if}
@@ -77,7 +77,7 @@
 			<Tabs.Trigger value={settings}>Settings</Tabs.Trigger>
 		</Tabs.List>
 		<Tabs.Content value={form}>
-			<Form bind:data={formData.form} handleFormSubmit={(event) => handleFormSubmit(event)} />
+			<Form bind:data={formData} handleFormSubmit={(event) => handleFormSubmit(event)} />
 		</Tabs.Content>
 		<Tabs.Content value={checklist}></Tabs.Content>
 		<Tabs.Content value={settings}></Tabs.Content>
