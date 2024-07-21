@@ -1,23 +1,12 @@
 import { redirect } from '@sveltejs/kit';
-import { supabase } from '$lib/supabaseClient.js';
 
-export const GET = async (event) => {
-    console.log(event)
-	const {
-		url,
-        locals: {supabase}
-	} = event;
-	const code = url.searchParams.get('access_token') as string;
-	const next = url.searchParams.get('next') ?? '/';
+export const GET = async ({ url, locals: { supabase } }) => {
+	const code = url.searchParams.get('provider_token');
+	console.log(url);
 
-  if (code) {
-    const { error } = await supabase.auth.exchangeCodeForSession(code)
-    if (!error) {
-      throw redirect(303, `/${next.slice(1)}`);
-    }
-    console.log(code, error);
-  }
+	if (code) {
+		await supabase.auth.exchangeCodeForSession(code);
+	}
 
-  // return the user to an error page with instructions
-  throw redirect(303, '/auth/auth-code-error');
+	throw redirect(303, '/');
 };

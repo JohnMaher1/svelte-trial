@@ -1,15 +1,26 @@
-import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from "$env/static/public";
-import { supabase } from "$lib/supabaseClient";
-import type { LayoutLoad } from "./$types";
-import { createBrowserClient, isBrowser, parseCookieHeader} from '@supabase/ssr'
+import { PUBLIC_SUPABASE_ANON_KEY, PUBLIC_SUPABASE_URL } from '$env/static/public';
+import { createSupabaseLoadClient } from '@supabase/auth-helpers-sveltekit';
+import type { LayoutLoad } from './$types';
 
 export const ssr = false;
 
-export const load = async () => {
-    const {data} = await supabase.from("countries").select();
-    return {
-        countries: data ?? []
-    }
-}
+export const load: LayoutLoad = async ({ fetch, data, depends }) => {
+	depends('supabase:auth');
 
-// https://smapkpkgajfynseisctt.supabase.co/auth/v1/callback
+	const supabase = createSupabaseLoadClient({
+		supabaseUrl: PUBLIC_SUPABASE_URL,
+		supabaseKey: PUBLIC_SUPABASE_ANON_KEY,
+		event: { fetch },
+		serverSession: data?.session ?? null,
+		cookieOptions: {
+			name: 'oauth-auth-token',
+			sameSite: 'lax'
+		}
+	});
+
+	const {
+		data: { session }
+	} = await supabase.auth.getSession();
+
+	return { supabase, session };
+};

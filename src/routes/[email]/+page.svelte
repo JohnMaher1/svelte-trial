@@ -8,7 +8,7 @@
 	import { supabase } from '$lib/supabaseClient';
 
 	export const load = async () => {
-		const res = await supabase.auth.signInWithOAuth({
+		await supabase.auth.signInWithOAuth({
 			provider: 'discord',
 			options: {
 				redirectTo: 'http://localhost:5173/auth/callback'
@@ -17,7 +17,7 @@
 	};
 </script>
 
-<Button onclick={() => load()}>Discord Time</Button>
+<Button onclick={async () => await load()}>Discord Time</Button>
 
 <div class="flex h-[var(--container-height)] flex-col items-center justify-center">
 	<h3 class="text-5xl">{email}'s Page</h3>
