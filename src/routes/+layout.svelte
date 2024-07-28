@@ -1,14 +1,24 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation';
+	import { goto, invalidate } from '$app/navigation';
 	import '../app.pcss';
 	import { ModeWatcher } from 'mode-watcher';
 	import Navbar from '../components/navbar.svelte';
-	import type { LayoutData } from './$types';
 	import { onMount } from 'svelte';
+	import type { SessionData } from './+layout';
 
-	export let data: LayoutData;
+	const { data }: SessionData = $props();
+	let { user, session, supabase } = $state(data);
 
-	$: ({ supabase, session } = data);
+	const logOut = async () => {
+		const { error } = await supabase.auth.signOut();
+		if (error) {
+			console.error('Sign out error', error.message);
+		} else {
+			user = null;
+			session = null;
+			goto('/');
+		}
+	};
 
 	onMount(() => {
 		const { data } = supabase.auth.onAuthStateChange((_, newSession) => {
@@ -21,7 +31,7 @@
 	});
 </script>
 
-<Navbar />
+<Navbar {user} {logOut} />
 
 <ModeWatcher />
 <slot />

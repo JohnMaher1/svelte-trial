@@ -4,7 +4,6 @@
 	import { onMount } from 'svelte';
 	import type { SessionData } from '../+layout';
 	import '../../app.pcss';
-	import Navbar from '../../components/navbar.svelte';
 
 	const { data }: SessionData = $props();
 	const { user, session, supabase } = data;
@@ -28,8 +27,6 @@
 		return () => data.subscription.unsubscribe();
 	});
 </script>
-
-<Navbar {user} {logOut} />
 
 <ModeWatcher />
 <slot />

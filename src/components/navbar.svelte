@@ -2,7 +2,7 @@
 	import type { User } from '@supabase/supabase-js';
 	import ThemeSwitch from './theme-switch.svelte';
 	const prefix = 'private';
-	let { user = null, logOut }: { user?: User | null; logOut?: () => void } = $props();
+	let { user, logOut }: { user: User | null; logOut: () => void } = $props();
 </script>
 
 <nav
