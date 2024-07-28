@@ -110,3 +110,8 @@ export interface DiscordUserMetaData {
 export interface DiscordUserCustomClaims {
 	global_name?: string;
 }
+
+export interface PokemonProfile {
+	description: string;
+	pokemon_ids: number[];
+}

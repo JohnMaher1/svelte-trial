@@ -17,7 +17,9 @@
 		{goto(`/private`)};
 	{:else}
 		<div class="flex flex-col items-center gap-4">
-			<p class="text-md font-bold">Looks like you are not signed in. Please sign in below</p>
+			<p class="text-2xl">
+				Please sign in to make your own <span class="font-bold">Pokemon Page!</span>
+			</p>
 			<form method="post" action="?/login">
 				<button formaction="?/login">
 					<Button class="w-48"
@@ -26,6 +28,11 @@
 					>
 				</button>
 			</form>
+			<p class="pt-12 text-lg">
+				...Or visit the <button onclick={() => goto('/community')} class="font-bold underline"
+					>Community</button
+				> to view other users pages!
+			</p>
 		</div>
 	{/if}
 </div>
