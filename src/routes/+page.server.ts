@@ -1,26 +1,21 @@
-import type { PageServerLoad, Actions } from './$types.js';
-import { fail, type RequestHandler } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms';
-import { zod } from 'sveltekit-superforms/adapters';
-import { formSchema } from '$lib/forms/schema.js';
+import { redirect } from '@sveltejs/kit';
 
-export const load: PageServerLoad = async () => {
-	return {
-		form: await superValidate(zod(formSchema))
-	};
-};
+import type { Actions } from './$types';
 
 export const actions: Actions = {
-	default: async (event) => {
-		const form = await superValidate(event, zod(formSchema));
-		console.log(form.data);
-		if (!form.valid) {
-			return fail(400, {
-				form
-			});
+	login: async ({ locals: { supabase }, url }) => {
+		const baseUrl = `${url.protocol}//${url.host}`;
+		const { error, data } = await supabase.auth.signInWithOAuth({
+			provider: 'discord',
+			options: {
+				redirectTo: `${baseUrl}/auth/callback`
+			}
+		});
+		if (data.url) {
+			redirect(303, data.url);
 		}
-		return {
-			form
-		};
+		if (error) {
+			redirect(303, '/auth/error');
+		}
 	}
 };

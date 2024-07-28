@@ -1,85 +1,50 @@
 <script lang="ts">
-	import Navbar from '../components/navbar.svelte';
-	import * as Tabs from '$libshadui/components/ui/tabs/index.js';
-	import TabsContent from '$libshadui/components/ui/tabs/tabs-content.svelte';
-	import Form from '../components/form.svelte';
-	import type { PageData } from './$types';
-	import { enhance } from '$app/forms';
-	import { error } from '@sveltejs/kit';
-	import type { FormSchema } from '$lib/forms/schema';
-	import { type SuperValidated, type Infer, superForm, type SuperForm } from 'sveltekit-superforms';
+	import { page } from '$app/stores';
+	import Button from '$libshadui/components/ui/button/button.svelte';
 
-	type TabValues = 'form' | 'checklist' | 'settings';
-	const form: TabValues = 'form';
-	const checklist: TabValues = 'checklist';
-	const settings: TabValues = 'settings';
-	const t: number = $state(0);
-	let selectedValue: TabValues = $state(form);
-	//let selectedTab: TabValues | undefined = form;
+	let userData: User | null = null;
 
-	const { data, form: formm } = $props();
+	const { data }: SessionData = $props();
+	const { user, session } = data;
 
-	let formData: SuperValidated<Infer<FormSchema>> = $state({
-		data: {
-			email: '',
-			password: '',
-			age: 1,
-			rememberMe: false,
-			terms: false,
-			username: '',
-			role: ''
-		},
-		id: 'form',
-		errors: {},
-		posted: false,
-		valid: false
-	});
-	//export { formData };
-
-	function handleFormSubmit(event: SubmitEvent) {
-		console.log(event);
-		const val: HTMLFormElement = event.target as HTMLFormElement;
-		// Prevent default form submission behavior
-		event.preventDefault();
-
-		// Assuming the action returns a message or form errors
-		const formData = new FormData(val);
-		fetch(val.action, {
-			method: 'POST',
-			body: formData
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				console.log('Success:', data);
-				if (data.form && data.form.valid) {
-					//message = 'Form submitted successfully!';
-				} else {
-					//message = 'Validation failed.';
-					// Handle validation errors
-				}
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-	}
+	import { goto } from '$app/navigation';
+	import type { User } from '@supabase/supabase-js';
+	import type { SessionData } from './+layout';
 </script>
 
-<div class="h-full w-full">
-	{#if formData.errors}
-		{#each Object.entries(formData.errors) as [key, value]}
-			<p>{key}: {value}</p>
-		{/each}
+<div class="flex h-[var(--container-height)] flex-col items-center justify-center">
+	{#if session !== null && user !== undefined}
+		{goto(`/private`)};
+	{:else}
+		<div class="flex flex-col items-center gap-4">
+			<p class="text-md font-bold">Looks like you are not signed in. Please sign in below</p>
+			<form method="post" action="?/login">
+				<button formaction="?/login">
+					<Button class="w-48"
+						><div>Login With Discord</div>
+						<img class="h-6 w-6 pl-2" src="./discord_icon.svg" alt="Discord Icon" /></Button
+					>
+				</button>
+			</form>
+		</div>
 	{/if}
-	<Tabs.Root class="p-8" bind:value={selectedValue}>
-		<Tabs.List class="grid w-full grid-cols-3 gap-1">
-			<Tabs.Trigger value={form}>Form</Tabs.Trigger>
-			<Tabs.Trigger value={checklist}>Check List</Tabs.Trigger>
-			<Tabs.Trigger value={settings}>Settings</Tabs.Trigger>
-		</Tabs.List>
-		<Tabs.Content value={form}>
-			<Form bind:data={formData} handleFormSubmit={(event) => handleFormSubmit(event)} />
-		</Tabs.Content>
-		<Tabs.Content value={checklist}></Tabs.Content>
-		<Tabs.Content value={settings}></Tabs.Content>
-	</Tabs.Root>
 </div>
+
+<!-- <h3 class="text-5xl">{email}'s Page</h3>
+<p class="pt-4">User description here...</p>
+<div class="flex gap-4">
+	<Card class="mt-4 p-8">
+		<div class="w-100 flex h-60 w-40 flex-col items-center">
+			<img src="" alt="pokemon" class="mx-auto h-24 w-24" />
+			<div class="text-xl font-bold">Pikachu</div>
+			<div class="text-primary">Electric</div>
+		</div>
+	</Card>
+	<Card class="mt-4 p-8">
+		<div class="w-100 flex h-60 w-40 flex-col items-center">
+			<img src="" alt="pokemon" class="mx-auto h-24 w-24" />
+			<div class="text-xl font-bold">Pikachu</div>
+			<div class="text-primary">Electric</div>
+		</div>
+	</Card> -->
+<!-- </div> -->

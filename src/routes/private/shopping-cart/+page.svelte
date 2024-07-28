@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CartProduct } from '$lib/types';
-	import CartItem from '../../components/cart-item.svelte';
+	import CartItem from '../../../components/cart-item.svelte';
 	import ShoppingCart from 'lucide-svelte/icons/shopping-cart';
 	import X from 'lucide-svelte/icons/X';
 

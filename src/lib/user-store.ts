@@ -1,21 +1,7 @@
-import type { Subscriber } from "svelte/store";
+import type { UserResponse } from '@supabase/supabase-js';
+import { writable } from 'svelte/store';
 
-const createSession = (accessToken: string) => {
-    const subscribers = new Set<Subscriber<string>>();
-
-    const subscribe = (subscriber: Subscriber<string>) => {
-        subscribers.add(subscriber);
-    };
-
-    const update = (updater: (accessToken: string) => string) => {
-        accessToken = updater(accessToken);
-        subscribers.forEach((subscriber) => subscriber(accessToken));
-    };
-
-    return {
-        subscribe,
-        update,
-    };
-};
-
-export const discordToken = createSession('');
+const localStorageUser = localStorage.getItem('user');
+export const user = writable<UserResponse | null>(
+	localStorageUser ? JSON.parse(localStorageUser) : null
+);

@@ -92,3 +92,21 @@ export interface AuthObject {
 	session_id: string;
 	is_anonymous: boolean;
 }
+
+export interface DiscordUserMetaData {
+	avatar_url: string;
+	custom_claims: DiscordUserCustomClaims;
+	email: string;
+	email_verified: boolean;
+	full_name: string;
+	iss: string;
+	name: string;
+	phone_verified: boolean;
+	picture: string;
+	provider_id: string;
+	sub: string;
+}
+
+export interface DiscordUserCustomClaims {
+	global_name?: string;
+}
