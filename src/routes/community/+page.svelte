@@ -4,21 +4,10 @@
 	import { Card } from '$libshadui/components/ui/card';
 	import { goto } from '$app/navigation';
 
-	type Profile = {
-		user_id: any;
-		description: any;
-		pokemon_ids: any;
-		username: any;
-	};
-
-	type Props = SessionData & {
-		profiles: Profile[];
-	};
-
-	const { data }: Props = $props();
+	const { data } = $props();
 	const { user, session, supabase, profiles } = data;
 
-	const goToProfile = (profile: Profile) => {
+	const goToProfile = (profile: { user_id: string }) => {
 		goto(`/community/${profile.user_id}`);
 	};
 </script>
@@ -29,7 +18,7 @@
 	<div class="grid grid-cols-1 items-center gap-2 lg:grid-cols-2 xl:grid-cols-3">
 		{#each profiles as profile}
 			<Card onclick={() => goToProfile(profile)} class="mt-4 cursor-pointer p-4">
-				<div class="w-100 flex h-24 flex-col items-center">
+				<div class="w-100 flex h-12 flex-col items-center justify-center">
 					<div class="text-center text-xl font-bold">{profile.username}</div>
 				</div></Card
 			>

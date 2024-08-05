@@ -1,10 +1,3 @@
-<script context="module">
-	export interface FormProps {
-		data: SuperValidated<Infer<FormSchema>>;
-		handleFormSubmit: (event: SubmitEvent) => void;
-	}
-</script>
-
 <script lang="ts">
 	import { formSchema, type FormSchema, roles } from '$lib/forms/schema';
 	import { Checkbox } from '$libshadui/components/ui/checkbox';
@@ -15,7 +8,13 @@
 	import { type Infer, superForm, type SuperValidated } from 'sveltekit-superforms';
 	import { zodClient } from 'sveltekit-superforms/adapters';
 
-	let { data = $bindable(), handleFormSubmit }: FormProps = $props();
+	let {
+		data = $bindable(),
+		handleFormSubmit
+	}: {
+		data: SuperValidated<Infer<FormSchema>>;
+		handleFormSubmit: (event: SubmitEvent) => void;
+	} = $props();
 
 	const form = $state(
 		superForm(data, {
